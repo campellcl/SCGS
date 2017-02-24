@@ -17,6 +17,23 @@ def main(tokens_file_path):
     """
     with open(tokens_file_path) as fp:
         data = json.load(fp=fp)
+    token_hashes = {}
+    graph = {}
+    kmer = 9
+    '''Build Hash Table'''
+    # Iterate through every submission and retain its index.
+    for sub_index, submission in enumerate(data):
+        # Iterate through all tokens in the given submission in groups of 9
+        for i in range(len(submission) - (kmer - 1)):
+            # Create the hash entry key with the submission index and the token sequence:
+            token_hash = tuple(submission[i:i+kmer])
+            # Append the token hash tuple as an immutable key if it doesn't already exist.
+            token_hashes.setdefault(token_hash, []).append((sub_index, i))
+    '''Build Graph Representation'''
+    # Iterate over every submission and pull out kmers
+    for sub_index, submission in enumerate(data):
+        pass
+        # TODO: build graph and vertices.
     print("loaded")
 
 if __name__ == "__main__":
