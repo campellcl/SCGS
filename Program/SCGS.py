@@ -8,11 +8,11 @@ __version__ = "2/17/2017"
 import os
 import json
 import networkx as nx
-
+'''Translates the tuple to a string for .dot file '''
 def tupleToStr(s):
     s = str(s)
     s = ''.join(s.split(","))
-    s = ''.join(s.split(" "))
+    s = '1'.join(s.split(" "))
     s = s[1 : len(s) - 1]
     return s
 
@@ -41,15 +41,24 @@ def main(tokens_file_path):
             if(token_hash in graph): #checking for kmer hash
                 if(token_hash2 in graph[token_hash]): #checking for right kmer
                     k = None
+                    # Was the new tuple inserted
+                    insert = False;
                     #finding the tuple to update the amount of times it was used
                     for z in graph[token_hash][token_hash2]:
                         if(z[0] == sub_index): #if the index is found set k to the tuple
                             nk = z[2] + 1
                             graph[token_hash][token_hash2].append((z[0], z[1], nk))  # append the tuple with updated number of uses
                             graph[token_hash][token_hash2].remove(z) #remove the tuple
+                            insert = True
                             break
+                    #Checking for insertion
+                    if(insert == False):
+                        #Adding the tuple to the graph, because it was not inserted
+                        graph[token_hash][token_hash2].append((sub_index, i, 1))
+                else:
+                    graph[token_hash][token_hash2] = [(sub_index, i, 1)]
             else:
-                graph.setdefault(token_hash, {}).setdefault(token_hash2, [(sub_index, i, 1)])
+                graph[token_hash] = {token_hash2 : [(sub_index, i, 1)]}
         fp.close()
     '''Build Graph Representation'''
     #Writing dot file to  graph.dot
@@ -61,7 +70,7 @@ def main(tokens_file_path):
             gString = tupleToStr(g)
             for i in graph[g].keys():
                 iString = tupleToStr(i)
-                f.write( gString + " -> " + iString + " [ label = \" " + str(g) + " \" ];\n") 
+                f.write( gString + " -> " + iString + " [ taillabel = \" " + str(g) + " \" ];\n") 
         f.write("\n\n}")
     f.close()
 
