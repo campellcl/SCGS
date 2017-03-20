@@ -10,10 +10,7 @@ import json
 import networkx as nx
 '''Translates the tuple to a string for .dot file '''
 def tupleToStr(s):
-    s = str(s)
-    s = ''.join(s.split(","))
-    s = ''.join(s.split(" "))
-    s = s[1 : len(s) - 1]
+    s = "\""+str(s)+"\""
     return s
 
 def main(tokens_file_path):
@@ -30,13 +27,17 @@ def main(tokens_file_path):
     '''Build Hash Table'''
     # Iterate through every submission and retain its index.
     for sub_index, submission in enumerate(data):
+        tokens = submission['tokens']
         # Iterate through all tokens in the given submission in groups of 9
-        for i in range(len(submission) - (kmer - 2)):
+        for i in range(len(tokens) - (kmer - 2)):
             # Create the hash entry key with the submission index and the token sequence:
-            token_hash = tuple(submission[i:i+kmer])
-            token_hash2 = tuple(submission[i + 1: i + 1 + kmer])
-            # Append the token hash tuple as an immutable key if it doesn't already exist.
-            token_hashes.setdefault(token_hash, []).append((sub_index, i))
+            token_hash = tuple(tokens[i:i+kmer])
+            token_hash2 = tuple(tokens[i + 1: i + 1 + kmer])
+            ''' Append the token hash tuple as an immutable key if it doesn't already exist
+             Every other time'''
+            if(i%2 == 0):
+                token_hashes.setdefault(token_hash, []).append((sub_index, i))
+                token_hashes.setdefault(token_hash2, []).append((sub_index, i))
             #Adding elements to the graph
             if(token_hash in graph): #checking for kmer hash
                 if(token_hash2 in graph[token_hash]): #checking for right kmer
@@ -70,7 +71,7 @@ def main(tokens_file_path):
             gString = tupleToStr(g)
             for i in graph[g].keys():
                 iString = tupleToStr(i)
-                f.write( gString + " -> " + iString + "[ taillabel = \" " + str(g) + " \" ];\n") 
+                f.write(  gString + "  ->  " + iString +";\n") 
         f.write("\n\n}")
     f.close()
 
