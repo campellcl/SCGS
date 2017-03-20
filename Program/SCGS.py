@@ -2,8 +2,8 @@
 SCGS.py
 Source Code Genome Sequencing
 """
-__author__ = "Chris Campell"
-__version__ = "2/17/2017"
+__author__ = "Chris Campell, David Sawyer"
+__version__ = "3/18/2017"
 
 import os
 import json
@@ -12,7 +12,7 @@ import networkx as nx
 def tupleToStr(s):
     s = str(s)
     s = ''.join(s.split(","))
-    s = '1'.join(s.split(" "))
+    s = ''.join(s.split(" "))
     s = s[1 : len(s) - 1]
     return s
 
@@ -31,7 +31,7 @@ def main(tokens_file_path):
     # Iterate through every submission and retain its index.
     for sub_index, submission in enumerate(data):
         # Iterate through all tokens in the given submission in groups of 9
-        for i in range(len(submission) - (kmer - 1)):
+        for i in range(len(submission) - (kmer - 2)):
             # Create the hash entry key with the submission index and the token sequence:
             token_hash = tuple(submission[i:i+kmer])
             token_hash2 = tuple(submission[i + 1: i + 1 + kmer])
@@ -70,7 +70,7 @@ def main(tokens_file_path):
             gString = tupleToStr(g)
             for i in graph[g].keys():
                 iString = tupleToStr(i)
-                f.write( gString + " -> " + iString + " [ taillabel = \" " + str(g) + " \" ];\n") 
+                f.write( gString + " -> " + iString + "[ taillabel = \" " + str(g) + " \" ];\n") 
         f.write("\n\n}")
     f.close()
 
