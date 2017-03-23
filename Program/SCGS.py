@@ -2,12 +2,13 @@
 SCGS.py
 Source Code Genome Sequencing
 """
-__author__ = "Chris Campell, David Sawyer"
-__version__ = "3/18/2017"
-
+__author__ = "David Sawyer"
+__version__ = "3/23/2017"
+'''Checking to see how many different ennding tokens there are in the 
+submission data and storing for the shortest path algorithm'''
 import os
 import json
-import networkx as nx
+from  SubmissionGraph import Info
 '''Translates the tuple to a string for .dot file '''
 def tupleToStr(s):
     s = "\""+str(s)+"\""
@@ -15,7 +16,7 @@ def tupleToStr(s):
 
 def main(tokens_file_path):
     """
-    main -Main method for script SCGS. Reads source code tokens into memory.
+    main -Main method for script SCGS. Writes graph files into a DOT file.
     :param tokens_file_path:
     :return:
     """
@@ -25,7 +26,7 @@ def main(tokens_file_path):
     graph = {}
     kmer = 9
     '''Build Hash Table'''
-    # Iterate through every submission and retain its index.
+# Iterate through every submission and retain its index.
     for sub_index, submission in enumerate(data):
         tokens = submission['tokens']
         # Iterate through all tokens in the given submission in groups of 9
@@ -34,7 +35,7 @@ def main(tokens_file_path):
             token_hash = tuple(tokens[i:i+kmer])
             token_hash2 = tuple(tokens[i + 1: i + 1 + kmer])
             ''' Append the token hash tuple as an immutable key if it doesn't already exist
-             Every other time'''
+            Every other time'''
             if(i%2 == 0):
                 token_hashes.setdefault(token_hash, []).append((sub_index, i))
                 token_hashes.setdefault(token_hash2, []).append((sub_index, i))
@@ -60,8 +61,8 @@ def main(tokens_file_path):
                     graph[token_hash][token_hash2] = [(sub_index, i, 1)]
             else:
                 graph[token_hash] = {token_hash2 : [(sub_index, i, 1)]}
-        fp.close()
-    '''Build Graph Representation'''
+
+    
     #Writing dot file to  graph.dot
     with open(graph_file_path, 'w') as f: 
         # Begining of .dot file  
