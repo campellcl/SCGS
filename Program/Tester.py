@@ -9,29 +9,20 @@ with open(json_path, 'r') as fp:
 
 lastkmer = EndNodes(json_path)
 lastkmerSize = lastkmer.size()
-kmerList =  lastkmer.endTKmers()
-kmerList = set(kmerList)
+kmerSet=  lastkmer.endKmers()
+
 info =  Info(json_path)
 graph = info.graph()
 end = info.end
-
-
 '''
 CHECKING IF NUMBER OF END NODES MATCH
 '''
-
-
-lastNode = None
-endernode = info.endergraph()
-endernodeE = endernode[end]
-endernodeSet = set(endernodeE)
-endernode =  endernode
-endernodeLen = len(endernodeSet)
 endList = []
 for g in graph:
     for i in graph[g]:
         if( i == end):
             endList.append(g)
+
 endListLen = len(endList)
 endSet = set(endList)
 endSetLen = len(endSet)
@@ -41,13 +32,13 @@ if(endListLen == lastkmerSize):
 
 else:
     print('FAILED: Not a match')
-    print(endernodeLen)
-    print(lastkmer)
+    print(endList)
+    print(kmerSet)
 '''
 CHECKING IF ENDING NODES MATCH
 '''
-if(len(kmerList - endSet)== 0):
+if(len(kmerSet - endSet) == 0):
     print('PASSED: The last tokens match')
 else:
     print('Diff:')
-    print(kmerList - endernodeSet)
+    print(kmerSet - endSet)

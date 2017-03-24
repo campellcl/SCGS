@@ -11,11 +11,8 @@ import json
 class Info:
     '''
     TODO:
-                -  Add Start and End Nodes to each submission
                 -  Shortest Path Algorithm 
-                - Peeling off  and adding nodes until zero subs
-                - Graph distribution of path lengths
-                - Compare grades across size differences
+                - Clean up grap
     '''
 
     '''
@@ -25,7 +22,7 @@ class Info:
     '''
     def __init__(self, tokens_file_path):
         self.info = self.createGraph(tokens_file_path)
-        self.start =  tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
+        self.start = tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
         self.end =  tuple((-2, -2, -2, -2, -2, -2, -2, -2, -2))
 
     #Creating the graph and engrams from student tokens.
@@ -35,8 +32,7 @@ class Info:
         token_hashes = {}
         graph = {}
         kmer = 9
-        endergraph = {}
-        start = tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
+        start =  tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
         end =  tuple((-2, -2, -2, -2, -2, -2, -2, -2, -2))
         '''Build Hash Table'''
         # Iterate through every submission and retain its index.
@@ -47,7 +43,7 @@ class Info:
             #Adding start and end nodes to graph
             graph.setdefault(start, {}).setdefault(startkmer, []).append((sub_index))
             graph.setdefault(lastkmer, {}).setdefault(end, []).append((sub_index))
-            endergraph.setdefault(end, []).append((lastkmer))
+            
             # Iterate through all tokens in the given submission in groups of 9
             for i in range(len(tokens) - (kmer - 1)):
                 # Create the hash entry key with the submission index and the token sequence:
@@ -80,7 +76,7 @@ class Info:
                 else:
                     graph[token_hash] = {token_hash2 : [(sub_index, i, 1)]}
          #Storing engram and graph into the info term to be returned as a dictionary           
-        info = { 'graph' : graph , 'engram' : token_hashes, 'endergraph' : endergraph}
+        info = { 'graph' : graph , 'engram' : token_hashes}
         return info
     #Getter for graph
     def graph(self):
@@ -88,8 +84,6 @@ class Info:
     #Getter for engram
     def engram(self):
     	return self.info['engram']
-    def endergraph(self):
-        return self.info['endergraph']
     def start():
        return self.start
     def end():
