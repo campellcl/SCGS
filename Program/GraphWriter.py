@@ -27,6 +27,7 @@ def main(tokens_file_path):
         # Begining of .dot file  
         f.write("digraph G {\n\n")
         for g in graph:
+            
             #creating string for node id
             gString = tupleToStr(g)
             iString = None

@@ -3,7 +3,6 @@ import json
 from LastKmer import EndNodes
 from SubmissionGraph import Info
 
-
 json_path = '../Data/tokens.json'
 with open(json_path, 'r') as fp:
 	data = json.load(fp)
@@ -28,20 +27,26 @@ endernodeE = endernode[end]
 endernodeSet = set(endernodeE)
 endernode =  endernode
 endernodeLen = len(endernodeSet)
+endList = []
+for g in graph:
+    for i in graph[g]:
+        if( i == end):
+            endList.append(g)
+endListLen = len(endList)
+endSet = set(endList)
+endSetLen = len(endSet)
 
-if(endernodeLen == lastkmerSize):
+if(endListLen == lastkmerSize):
     print('PASSED: Nodes Numbers Match')
 
 else:
     print('FAILED: Not a match')
     print(endernodeLen)
     print(lastkmer)
-
-
 '''
 CHECKING IF ENDING NODES MATCH
 '''
-if(len(kmerList - endernodeSet )== 0):
+if(len(kmerList - endSet)== 0):
     print('PASSED: The last tokens match')
 else:
     print('Diff:')
