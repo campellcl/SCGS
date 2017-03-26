@@ -1,8 +1,7 @@
-import networkx as nx
 import json
 from LastKmer import EndNodes
 from SubmissionGraph import Info
-
+from io import BufferedReader
 json_path = '../Data/tokens.json'
 with open(json_path, 'r') as fp:
 	data = json.load(fp)
@@ -42,3 +41,9 @@ if(len(kmerSet - endSet) == 0):
 else:
     print('Diff:')
     print(kmerSet - endSet)
+
+''' Misc  ''' 
+t = (1, 14, 25)
+l = [1, 14, 25]
+print(t[0:4])
+print(l[-1])

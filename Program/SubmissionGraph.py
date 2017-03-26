@@ -12,7 +12,7 @@ class Info:
     '''
     TODO:
                 -  Shortest Path Algorithm 
-                - Clean up grap
+                - Clean up graph
     '''
 
     '''
@@ -35,14 +35,19 @@ class Info:
         start =  tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
         end =  tuple((-2, -2, -2, -2, -2, -2, -2, -2, -2))
         '''Build Hash Table'''
+        '''Is sub_index the right move for looikking to increase weight and how do you increase weight on the end node... Is it going to be a special case?'''
         # Iterate through every submission and retain its index.
         for sub_index, submission in enumerate(data):
             tokens = submission['tokens']
             startkmer = tuple(tokens[0 : kmer ])
             lastkmer = tuple(tokens[(len(tokens) - kmer ) : len(tokens) ])
             #Adding start and end nodes to graph
-            graph.setdefault(start, {}).setdefault(startkmer, []).append((sub_index))
-            graph.setdefault(lastkmer, {}).setdefault(end, []).append((sub_index))
+            graph.setdefault(start, {}).setdefault(startkmer, []).append((sub_index, ))
+            if(lastkmer in graph):
+                if(end in graph[lastkmer]):
+                    for i in graph[lastkmer][end]:
+                        if(i[0] == sub_index):
+                            graph[lastkmer][end] = graph[lastkmer][end] 
             
             # Iterate through all tokens in the given submission in groups of 9
             for i in range(len(tokens) - (kmer - 1)):
@@ -62,7 +67,7 @@ class Info:
                         #finding the tuple to update the amount of times it was used
                         for z in graph[token_hash][token_hash2]:
                             if(z[0] == sub_index): #if the index is found set k to the tuple
-                                nk = z[2] + 1
+                                nk = z[1] + 1
                                 graph[token_hash][token_hash2].append((z[0], z[1], nk))  # append the tuple with updated number of uses
                                 graph[token_hash][token_hash2].remove(z) #remove the tuple
                                 insert = True
@@ -78,6 +83,8 @@ class Info:
          #Storing engram and graph into the info term to be returned as a dictionary           
         info = { 'graph' : graph , 'engram' : token_hashes}
         return info
+   
+
     #Getter for graph
     def graph(self):
     	return self.info['graph']
