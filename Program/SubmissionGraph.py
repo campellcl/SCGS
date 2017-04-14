@@ -3,7 +3,7 @@ SubmissionGraph.py
 Source Code Genome Sequencing
 """
 __author__ = "Chris Campbell, David Sawyer, Kevin Alverez"
-__version__ = "3/23/2017"
+__version__ = "3/29/2017"
 
 import os
 import json
@@ -29,28 +29,26 @@ class Info:
     def createGraph(self, tokens_file_path):
         with open(tokens_file_path) as fp:
             data = json.load(fp=fp)
+            data = data[0:100]
+            self.data = data
         token_hashes = {}
         graph = {}
         kmer = 9
         start =  tuple((-1, -1, -1, -1, -1, -1, -1, -1, -1))
         end =  tuple((-2, -2, -2, -2, -2, -2, -2, -2, -2))
         '''Build Hash Table'''
-        '''Is sub_index the right move for looikking to increase weight and how do you increase weight on the end node... Is it going to be a special case?'''
+        '''You got 0's in your weight... WTF?  Also, look at the Start Node you need to ad weight to that shit'''
         # Iterate through every submission and retain its index.
         for sub_index, submission in enumerate(data):
             tokens = submission['tokens']
             startkmer = tuple(tokens[0 : kmer ])
             lastkmer = tuple(tokens[(len(tokens) - kmer ) : len(tokens) ])
             #Adding start and end nodes to graph
-            graph.setdefault(start, {}).setdefault(startkmer, []).append((sub_index, ))
-            if(lastkmer in graph):
-                if(end in graph[lastkmer]):
-                    for i in graph[lastkmer][end]:
-                        if(i[0] == sub_index):
-                            graph[lastkmer][end] = graph[lastkmer][end] 
+            graph.setdefault(start, {}).setdefault(startkmer, []).append(( sub_index, 1, 1)) 
+            graph.setdefault(lastkmer, {}).setdefault(end, []).append((sub_index, len(tokens) - kmer, 1))
             
             # Iterate through all tokens in the given submission in groups of 9
-            for i in range(len(tokens) - (kmer - 1)):
+            for i in range(len(tokens) - (kmer)):
                 # Create the hash entry key with the submission index and the token sequence:
                 token_hash = tuple(tokens[i : i + kmer])
                 token_hash2 = tuple(tokens[i + 1: i + 1 + kmer])
@@ -67,8 +65,8 @@ class Info:
                         #finding the tuple to update the amount of times it was used
                         for z in graph[token_hash][token_hash2]:
                             if(z[0] == sub_index): #if the index is found set k to the tuple
-                                nk = z[1] + 1
-                                graph[token_hash][token_hash2].append((z[0], z[1], nk))  # append the tuple with updated number of uses
+                                nk = z[2] + 1
+                                graph[token_hash][token_hash2].append((z[0], z[1], nk))  #append the tuple with updated number of uses
                                 graph[token_hash][token_hash2].remove(z) #remove the tuple
                                 insert = True
                                 break
@@ -76,21 +74,25 @@ class Info:
                         if(insert == False):
                             #Adding the tuple to the graph, because it was not inserted
                             graph[token_hash][token_hash2].append((sub_index, i, 1))
+                    #If hash2 not in graph insert it
                     else:
-                        graph[token_hash][token_hash2] = [(sub_index, i, 1)]
+                         graph[token_hash] [token_hash2 ] = [(sub_index, i, 1)]
+                #If hash not found in the graph insert the new token hash
                 else:
                     graph[token_hash] = {token_hash2 : [(sub_index, i, 1)]}
          #Storing engram and graph into the info term to be returned as a dictionary           
         info = { 'graph' : graph , 'engram' : token_hashes}
         return info
    
-
+    #Return data inputed to graph
+    def graph():
+        return self.data
     #Getter for graph
     def graph(self):
-    	return self.info['graph']
+        return self.info['graph']
     #Getter for engram
     def engram(self):
-    	return self.info['engram']
+        return self.info['engram']
     def start():
        return self.start
     def end():
