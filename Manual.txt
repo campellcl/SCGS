@@ -1,0 +1,42 @@
+There are three folders in the project: Data, Program, Visuals. In these folders we will explain what is contained in these folders and what each file is doing.  
+
+Data - this contains the submission information that is stored as a JSON file.  By default this is just the tokens.json file.
+        - tokens.json - this contains information about a set of submissions.
+
+Program -  This file contains several files: .all, .csv, .dot, .spreadsheat, GraphWriter.py, LastKmer.py, 
+                  SubmissionGraph.py, Tester.py
+
+   - GraphWriter.py - This file takes a JSON file and inputs into the SubmissionGraph.py and outputs the  
+      result in a Graphviz and/or Gephi readable file. There are three options for GraphWriter.py to output: .csv, .dot, .spreadsheat.
+
+      EXAMPLE USE:
+        > python3 GraphWriter.py
+        What file type(s) would you like to be printed?
+        (Enter each option separated by a space)
+        Options: 
+        dot
+        csv
+        spreadsheet
+        csv <-- user input
+        .csv file written to /Visuals/graph.csv <-- Program output
+      EXAMPLE USE WITH INPUT FILE USE:
+      >python3 GraphWriter.py < .all
+
+      - Input Files for Graphwriter:
+         - .all - This is an input file for GraphWriter.py that tells GraphWriter.py to out put a .csv, .dot,       
+           and  .spreadsheat files to the /Visual folder. These files are readable inputs to gephi and .dot  is readable to both Gephi and Graphviz.
+         - .csv - Tells GraphWriter.py to output a Gephi readable .csv  file
+         - .dot -  Tells GraphWriter.py to output a Gephi and GraphViz readable .dot file.
+         - .spreadsheat - Tells GraphWriter.py to output a Gephi readable spreadsheet file, which is a custom 
+            .csv file for Gephi.
+
+      - LastKmer.py -  Used in the Tester.py to check if the lastkemrs in the JSON file match the last kmers 
+        in the SubmissionGraph.py.
+
+      - SubmissionGraph.py - This file takes an input from a JSON file and organizes the token data into a 
+        Bruijn Graph. 
+     
+      - Tester.py - Used to test different parts of the Graph. This really isn't standardized at all. Its just used 
+         to test parts of the graph that may be questionable or make sure a portion of the program is running correctly. It is modified as needed and does nothing in particular currently.
+
+Visuals - This folder stores any outputs from GraphWriter.py.
