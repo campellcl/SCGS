@@ -1,4 +1,4 @@
-There are three folders in the project: Data, Program, Visuals. In these folders we will explain what is contained in these folders and what each file is doing.  
+There are three folders in the project: Data, Program, Visuals. In this file we will explain what is contained in these folders and what each file in these folders is doing.  
 
 Data - this contains the submission information that is stored as a JSON file.  By default this is just the tokens.json file.
         - tokens.json - this contains information about a set of submissions.
