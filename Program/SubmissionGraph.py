@@ -52,8 +52,7 @@ class Info:
                 # Create the hash entry key with the submission index and the token sequence:
                 token_hash = tuple(tokens[i : i + kmer])
                 token_hash2 = tuple(tokens[i + 1: i + 1 + kmer])
-                ''' Append the token hash tuple as an immutable key if it doesn't already exist
-                Every other time'''
+                ''' Append the token hash tuple as an immutable key if it doesn't already exist'''
                 token_hashes.setdefault(token_hash, []).append((sub_index, i))
                 token_hashes.setdefault(token_hash2, []).append((sub_index, i))
                 #Adding elements to the graph
@@ -93,7 +92,9 @@ class Info:
     #Getter for engram
     def engram(self):
         return self.info['engram']
+    #returns the start node
     def start():
        return self.start
+    #returns the end node
     def end():
         return self.end
