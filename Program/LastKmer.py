@@ -7,8 +7,9 @@ class EndNodes:
         self.lastkmers =  self.grabKmers(tokens_file_path)
     
     def grabKmers(self, tokens_file_path):
-        with open(tokens_file_path, 'r') as fp:
+        with open(tokens_file_path) as fp:
             data = json.load(fp=fp)
+            data = data[0:50]
             lastkmers = []
             l = []
         #itereating through the submissions and grabing the last Kmer
